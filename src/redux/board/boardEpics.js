@@ -46,7 +46,8 @@ const sendActionEpic = (action$, state$) => action$.pipe(
         action => observableSendAction(state$.value.Board.token, state$.value.Board.matchId, state$.value.Board.actions).pipe(
             mergeMap(
                 data => of(
-                    boardDuck.actions.successRequestSendAction()
+                    boardDuck.actions.successRequestSendAction(),
+                    boardDuck.actions.requestFetchMapInfo()
                 )
             ),
             catchError(
