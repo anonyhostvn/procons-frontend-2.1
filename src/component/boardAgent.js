@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {boardDuck} from '../redux/board/boardDucks';
 
 const BoardAgent = ({rowId, colId, teamId, agentId, setDraggingAgent, ownerId, isVirtual}) => {
-    const iconType = teamId === ownerId ? 'android' : 'apple';
+    const iconType = teamId === ownerId ? 'info-circle' : 'warning';
 
     const [{isDragging}, drag, preview] = useDrag({
         item: {type: ItemTypes.AGENT},
@@ -37,7 +37,15 @@ const BoardAgent = ({rowId, colId, teamId, agentId, setDraggingAgent, ownerId, i
         <div
             ref={drag}
             style={{
-                opacity: isDragging ? 0.1 : 1
+                opacity: isDragging ? 0.1 : 1,
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                textAlign: 'center',
+                paddingTop: '20%',
+                top: 0,
+                left: 0,
+                zIndex: 1
             }}
         >
             <DragPreviewImage connect={preview} src={placeholderImg} />

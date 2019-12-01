@@ -19,7 +19,7 @@ export const generateActions = (mapInfo, actions, draggingAgent, {toX, toY}) => 
         agentID: draggingAgent.agentId,
         type: (draggingAgent.x === toX && draggingAgent.y === toY)
                 ? 'stay'
-                : (mapInfo.tiled[toY][toX] === 0 || mapInfo.tiled[toY][toX] === draggingAgent.teamId) ? 'move' : 'remove',
+                : (mapInfo.tiled[toY-1][toX-1] === 0 || mapInfo.tiled[toY-1][toX-1] === draggingAgent.teamId) ? 'move' : 'remove',
         dx: toX - draggingAgent.x,
         dy: toY - draggingAgent.y
     };

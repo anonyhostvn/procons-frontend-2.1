@@ -6,10 +6,9 @@ const Agent = ({iconType}) => {
     return (
         <div
             style={{
-                fontSize: 25,
             }}
         >
-            <Icon type={iconType}/>
+            <Icon type={iconType} theme="filled"/>
         </div>
     );
 };

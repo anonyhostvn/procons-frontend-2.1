@@ -45,8 +45,8 @@ const agentCreator = (rowId, colId, teams, virtualAgents) => {
 };
 
 const squareCreator = (rowId, colId, boardWidth, boardHeight, squareScore, squareTile, teams, virtualAgents) => {
-    const percentWidth = 95 / boardWidth;
-    const percentHeight = 95 / boardHeight;
+    const percentWidth = 100.0 / boardWidth;
+    const percentHeight = 100.0 / boardHeight;
 
     return (
         <div key={`${rowId} - ${colId}`} style={{width: `${percentWidth}%`, height: `${percentHeight}%`}}>

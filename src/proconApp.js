@@ -4,6 +4,7 @@ import HTML5Backend from "react-dnd-html5-backend";
 import {Provider} from 'react-redux';
 import {store} from './redux/store';
 import GameScreen from "./container/gameScreen";
+import 'antd/dist/antd.css';
 
 const ProconsApp = () => {
     return (

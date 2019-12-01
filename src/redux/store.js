@@ -3,6 +3,7 @@ import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import {createEpicMiddleware} from 'redux-observable';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import {rootEpics} from "./rootEpics";
 
 
 const epicMiddleware = createEpicMiddleware();
@@ -23,3 +24,5 @@ const store = createStore(
 );
 
 export {store};
+
+epicMiddleware.run(rootEpics);
