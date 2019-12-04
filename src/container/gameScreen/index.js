@@ -2,7 +2,20 @@ import React, {useState} from "react";
 import Board from "../../component/board";
 import {connect} from "react-redux";
 import {boardDuck} from '../../redux/board/boardDucks';
-import {Button, Icon, Input, InputNumber, Modal, notification, Select, Spin} from 'antd';
+import {
+    Button,
+    Card,
+    Col,
+    Icon,
+    Input,
+    InputNumber,
+    Modal,
+    notification,
+    Row,
+    Select,
+    Spin,
+    Statistic
+} from 'antd';
 
 const GameScreen = ({
         mapInfo,
@@ -18,20 +31,96 @@ const GameScreen = ({
         const [ token, setToken ] = useState('');
         const [ tokenModalVisible, setTokenModalVisible] = useState(true);
 
+        const ownerTeamInfo = mapInfo ? mapInfo.teams.filter(team => team.teamID === ownerId)[0] : null;
+        const opponentTeamInfo = mapInfo ? mapInfo.teams.filter(team => team.teamID === opponentId)[0] : null;
+
         return (
-            <div>
+            <Row>
+                <Col span={12}>
                 <Spin spinning={isLoading}>
                     <Board mapInfo={mapInfo}/>
                 </Spin>
+                </Col>
 
-                <Button onClick={() => requestFetchMapInfo()}>
-                    <Icon type="undo" />
-                    Cập nhật map
-                </Button>
+                <Col span={12}>
+                    <Row gutter={16} style={{width: '500px', margin: 20}}>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    title="Điểm đội mình"
+                                    value={(ownerTeamInfo) ? ownerTeamInfo.tilePoint + ownerTeamInfo.areaPoint : 0}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    prefix={<Icon type="arrow-up" />}
+                                />
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    title="Điểm tile đội mình"
+                                    value={ownerTeamInfo ? ownerTeamInfo.tilePoint : 0}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    prefix={<Icon type="arrow-up" />}
+                                />
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    title="Điểm khu vực đội mình"
+                                    value={ownerTeamInfo ? ownerTeamInfo.areaPoint : 0}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    prefix={<Icon type="arrow-up" />}
+                                />
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    title="Điểm đối phương"
+                                    value={opponentTeamInfo ? opponentTeamInfo.tilePoint + opponentTeamInfo.areaPoint : 0}
+                                    precision={2}
+                                    valueStyle={{ color: '#cf1322' }}
+                                    prefix={<Icon type="arrow-up" />}
+                                />
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    title="Điểm tile đối phương"
+                                    value={opponentTeamInfo ? opponentTeamInfo.tilePoint : 0}
+                                    precision={2}
+                                    valueStyle={{ color: '#cf1322' }}
+                                    prefix={<Icon type="arrow-up" />}
+                                />
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    title="Điểm khu vực đối phương"
+                                    value={opponentTeamInfo ? opponentTeamInfo.areaPoint : 0}
+                                    precision={2}
+                                    valueStyle={{ color: '#cf1322' }}
+                                    prefix={<Icon type="arrow-up" />}
+                                />
+                            </Card>
+                        </Col>
+                    </Row>
 
-                <Button onClick={() => requestSendAction()} loading={isLoading}>
-                    Gửi hành động
-                </Button>
+                    <Button onClick={() => requestFetchMapInfo()}>
+                        <Icon type="undo" />
+                        Cập nhật map
+                    </Button>
+
+                    <Button onClick={() => requestSendAction()} loading={isLoading}>
+                        Gửi hành động
+                    </Button>
+                </Col>
 
                 <Modal
                     title={'Đăng nhập'}
@@ -76,7 +165,7 @@ const GameScreen = ({
                     </div>
 
                 </Modal>
-            </div>
+            </Row>
         )
 };
 
