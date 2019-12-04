@@ -37,13 +37,22 @@ const GameScreen = ({
         return (
             <Row>
                 <Col span={12}>
-                <Spin spinning={isLoading}>
-                    <Board mapInfo={mapInfo}/>
-                </Spin>
+                    <Spin spinning={isLoading}>
+                        <Board mapInfo={mapInfo}/>
+                    </Spin>
                 </Col>
 
                 <Col span={12}>
                     <Row gutter={16} style={{width: '500px', margin: 20}}>
+                        <Col span={24}>
+                            <Statistic
+                                title="Lượt chơi"
+                                value={mapInfo ? mapInfo.turn : 0}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600' }}
+                                prefix={<Icon type="arrow-up" />}
+                            />
+                        </Col>
                         <Col span={8}>
                             <Card>
                                 <Statistic
