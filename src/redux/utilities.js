@@ -14,6 +14,27 @@ export const moveAgent = (virtualAgents, draggingAgent, {toX, toY}) => {
     ];
 };
 
+export const botMoveAgent = (actions, recentAgents, teamId) => {
+    const newAgents = [];
+
+    actions.forEach(
+        action => {
+            recentAgents.filter(agent => agent.agentID === action.agentID).forEach(
+                rightAgent => {
+                    newAgents.push({
+                        x: rightAgent.x + action.dx,
+                        y: rightAgent.y + action.dy,
+                        agentId: rightAgent.agentID,
+                        teamId
+                    })
+                }
+            )
+        }
+    );
+
+    return newAgents;
+};
+
 export const generateActions = (mapInfo, actions, draggingAgent, {toX, toY}) => {
     const singleAction = {
         agentID: draggingAgent.agentId,

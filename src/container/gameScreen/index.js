@@ -4,38 +4,40 @@ import {connect} from "react-redux";
 import {boardDuck} from '../../redux/board/boardDucks';
 import {
     Button,
-    Card,
     Col,
     Icon,
     Input,
     InputNumber,
     Modal,
-    notification,
+    notification, PageHeader,
     Row,
     Select,
     Spin,
-    Statistic
 } from 'antd';
+import {ScoreBoard} from "./ScoreBoard";
+import {GameScreenWrapper} from "./gameScreen.style";
 
 const GameScreen = ({
-        mapInfo,
-        isLoading,
-        isTokenValid,
-        requestCheckToken,
-        setGameToken,
-        ownerId, setGameOwnerId,
-        opponentId, setGameOpponentId,
-        matchId, listMatch, setGameMatchId,
-        requestFetchMapInfo, requestSendAction
-    }) => {
-        const [ token, setToken ] = useState('');
-        const [ tokenModalVisible, setTokenModalVisible] = useState(true);
+                        mapInfo,
+                        isLoading,
+                        isTokenValid,
+                        requestCheckToken,
+                        setGameToken,
+                        ownerId, setGameOwnerId,
+                        opponentId, setGameOpponentId,
+                        matchId, listMatch, setGameMatchId,
+                        requestFetchMapInfo, requestSendAction, requestAskBot
+                    }) => {
+    const [token, setToken] = useState('');
+    const [tokenModalVisible, setTokenModalVisible] = useState(true);
 
-        const ownerTeamInfo = mapInfo ? mapInfo.teams.filter(team => team.teamID === ownerId)[0] : null;
-        const opponentTeamInfo = mapInfo ? mapInfo.teams.filter(team => team.teamID === opponentId)[0] : null;
+    return (
+        <GameScreenWrapper>
+            <div className={'page-header'}>
+                <PageHeader title={'Procons 2020'}/>
+            </div>
 
-        return (
-            <Row>
+            <Row className={'play-fields'}>
                 <Col span={12}>
                     <Spin spinning={isLoading}>
                         <Board mapInfo={mapInfo}/>
@@ -43,91 +45,19 @@ const GameScreen = ({
                 </Col>
 
                 <Col span={12}>
-                    <Row gutter={16} style={{width: '500px', margin: 20}}>
-                        <Col span={24}>
-                            <Statistic
-                                title="Lượt chơi"
-                                value={mapInfo ? mapInfo.turn : 0}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                prefix={<Icon type="arrow-up" />}
-                            />
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    title="Điểm đội mình"
-                                    value={(ownerTeamInfo) ? ownerTeamInfo.tilePoint + ownerTeamInfo.areaPoint : 0}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                    prefix={<Icon type="arrow-up" />}
-                                />
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    title="Điểm tile đội mình"
-                                    value={ownerTeamInfo ? ownerTeamInfo.tilePoint : 0}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                    prefix={<Icon type="arrow-up" />}
-                                />
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    title="Điểm khu vực đội mình"
-                                    value={ownerTeamInfo ? ownerTeamInfo.areaPoint : 0}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                    prefix={<Icon type="arrow-up" />}
-                                />
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    title="Điểm đối phương"
-                                    value={opponentTeamInfo ? opponentTeamInfo.tilePoint + opponentTeamInfo.areaPoint : 0}
-                                    precision={2}
-                                    valueStyle={{ color: '#cf1322' }}
-                                    prefix={<Icon type="arrow-up" />}
-                                />
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    title="Điểm tile đối phương"
-                                    value={opponentTeamInfo ? opponentTeamInfo.tilePoint : 0}
-                                    precision={2}
-                                    valueStyle={{ color: '#cf1322' }}
-                                    prefix={<Icon type="arrow-up" />}
-                                />
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    title="Điểm khu vực đối phương"
-                                    value={opponentTeamInfo ? opponentTeamInfo.areaPoint : 0}
-                                    precision={2}
-                                    valueStyle={{ color: '#cf1322' }}
-                                    prefix={<Icon type="arrow-up" />}
-                                />
-                            </Card>
-                        </Col>
-                    </Row>
+                    <ScoreBoard mapInfo={mapInfo} opponentId={opponentId} ownerId={ownerId}/>
 
                     <Button onClick={() => requestFetchMapInfo()}>
-                        <Icon type="undo" />
+                        <Icon type="undo"/>
                         Cập nhật map
                     </Button>
 
                     <Button onClick={() => requestSendAction()} loading={isLoading}>
                         Gửi hành động
+                    </Button>
+
+                    <Button onClick={() => requestAskBot({mapInfo, teamId: ownerId})}>
+                        Magic
                     </Button>
                 </Col>
 
@@ -154,7 +84,8 @@ const GameScreen = ({
                     </Button>
 
                     <div style={{display: 'flex', flexWrap: 'wrap'}}>
-                        <Select value={matchId} onChange={value => setGameMatchId({matchId: value})} style={{width: '50%'}}>
+                        <Select value={matchId} onChange={value => setGameMatchId({matchId: value})}
+                                style={{width: '50%'}}>
                             {
                                 listMatch.map(singleMatch => {
                                     return (
@@ -165,17 +96,24 @@ const GameScreen = ({
                                 })
                             }
                         </Select>
-                        <Button style={{width: '20%', backgroundColor: 'darkgray', color: 'white'}} disabled={true}> ID trận đấu </Button>
-                        <Icon style={{width: '10%', color: 'green', fontSize: 30}} type={isTokenValid ? 'check-circle' : 'close'} />
-                        <InputNumber style={{width: '50%'}} value={ownerId} onChange={value => setGameOwnerId({ownerId: value})}/>
-                        <Button style={{width: '20%', backgroundColor: 'green', color: 'white'}} disabled={true}> ID đội mình </Button>
-                        <InputNumber style={{width: '50%'}} value={opponentId} onChange={value => setGameOpponentId({opponentId: value})}/>
-                        <Button style={{width: '20%', backgroundColor: 'red', color: 'white'}} disabled={true}> ID đội bạn </Button>
+                        <Button style={{width: '20%', backgroundColor: 'darkgray', color: 'white'}} disabled={true}> ID
+                            trận đấu </Button>
+                        <Icon style={{width: '10%', color: 'green', fontSize: 30}}
+                              type={isTokenValid ? 'check-circle' : 'close'}/>
+                        <InputNumber style={{width: '50%'}} value={ownerId}
+                                     onChange={value => setGameOwnerId({ownerId: value})}/>
+                        <Button style={{width: '20%', backgroundColor: 'green', color: 'white'}} disabled={true}> ID đội
+                            mình </Button>
+                        <InputNumber style={{width: '50%'}} value={opponentId}
+                                     onChange={value => setGameOpponentId({opponentId: value})}/>
+                        <Button style={{width: '20%', backgroundColor: 'red', color: 'white'}} disabled={true}> ID đội
+                            bạn </Button>
                     </div>
 
                 </Modal>
             </Row>
-        )
+        </GameScreenWrapper>
+    )
 };
 
 const mapStateToProps = state => ({

@@ -8,7 +8,7 @@ const Agent = ({iconType}) => {
             style={{
             }}
         >
-            <Icon type={iconType} theme="filled"/>
+            <Icon type={iconType} theme="filled" style={{fontSize: 30}}/>
         </div>
     );
 };

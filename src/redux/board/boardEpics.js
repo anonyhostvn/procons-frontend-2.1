@@ -1,6 +1,11 @@
 import {combineEpics, ofType} from "redux-observable";
 import { boardDuck} from "./boardDucks";
-import {observableCheckToken, observableFetchMapInfo, observableSendAction} from "../../services/board";
+import {
+    observableAskBotAction,
+    observableCheckToken,
+    observableFetchMapInfo,
+    observableSendAction
+} from "../../services/board";
 import {of} from "rxjs";
 import {catchError, mergeMap, pluck} from "rxjs/operators";
 
@@ -59,8 +64,27 @@ const sendActionEpic = (action$, state$) => action$.pipe(
     )
 );
 
+const askBotEpic = (action$, state$) => action$.pipe(
+    ofType(boardDuck.actions.requestAskBot().type),
+    mergeMap(
+        action => observableAskBotAction(action.payload.mapInfo, action.payload.teamId).pipe(
+            mergeMap(
+                data => of(
+                    boardDuck.actions.successRequestAskBot({actions: data.data.actions})
+                )
+            ),
+            catchError(
+                err => of(
+                    boardDuck.actions.errorRequestAskBot({})
+                )
+            )
+        )
+    )
+);
+
 export const boardEpics = combineEpics(
     checkTokenEpic,
     fetchMapInfoEpic,
-    sendActionEpic
+    sendActionEpic,
+    askBotEpic
 );

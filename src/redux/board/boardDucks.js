@@ -1,6 +1,6 @@
 import autodux from 'autodux';
 import {mapInfoMocks} from "../../fakeData";
-import {generateActions, moveAgent} from "../utilities";
+import {botMoveAgent, generateActions, moveAgent} from "../utilities";
 import {notification} from "antd";
 
 export const boardDuck = autodux({
@@ -98,6 +98,33 @@ export const boardDuck = autodux({
                 ...state,
                 isLoading: false,
                 isTokenValid: false
+            }
+        },
+
+        requestAskBot: (state, payload) => {
+            return {
+                ...state,
+                isLoading: true
+            }
+        },
+        successRequestAskBot: (state, payload) => {
+            console.log(payload);
+            const listRecentAgent = state.mapInfo.teams.filter(team => team.teamID === state.ownerId)[0].agents;
+            return {
+                ...state,
+                isLoading: false,
+                actions: payload.actions,
+                virtualAgents: [
+                    ...botMoveAgent(payload.actions, listRecentAgent, state.ownerId)
+                ]
+            }
+        },
+        errorRequestAskBot: (state, payload) => {
+            notification.error({message: 'Bot fell error'});
+            console.log('error');
+            return {
+                ...state,
+                isLoading: false
             }
         },
 

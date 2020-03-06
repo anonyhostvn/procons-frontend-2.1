@@ -1,6 +1,6 @@
 import {Observable} from "rxjs";
 import Axios from "axios";
-import {server} from "../enviroment";
+import {botServer, server} from "../enviroment";
 
 export const observableCheckToken = token => new Observable(observer => {
     Axios.get(`${server}/matches`, {
@@ -24,4 +24,8 @@ export const observableSendAction = (token, matchId, actions) => new Observable(
             Authorization: token
         }
     }).then(data => observer.next(data)).catch(err => observer.error(err));
+});
+
+export const observableAskBotAction = (mapInfo, teamId) => new Observable(observer => {
+    Axios.post(`${botServer}/ask-bot` , {mapInfo, teamId}).then(data => observer.next(data)).catch(err => observer.error(err));
 });

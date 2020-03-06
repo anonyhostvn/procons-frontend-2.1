@@ -39,7 +39,7 @@ const agentCreator = (rowId, colId, teams, virtualAgents) => {
             agentId && teamId
             ? <BoardAgent rowId={rowId} colId={colId} agentId={agentId} teamId={teamId} isVirtual={isVirtual}/>
             : null
-        }
+            }
         </div>
     )
 };
