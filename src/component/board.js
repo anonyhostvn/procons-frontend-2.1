@@ -4,8 +4,8 @@ import BoardAgent from "./boardAgent";
 import {connect} from 'react-redux';
 
 const boardStyle = {
-    width: 500,
-    height: 500,
+    width: '80%',
+    height: '100%',
     display: 'flex',
     flexWrap: 'wrap'
 };

@@ -4,15 +4,13 @@ import {connect} from "react-redux";
 import {boardDuck} from '../../redux/board/boardDucks';
 import {
     Button,
-    Col,
     Icon,
     Input,
     InputNumber,
     Modal,
     notification, PageHeader,
-    Row,
     Select,
-    Spin,
+    Spin, Tooltip,
 } from 'antd';
 import {ScoreBoard} from "./ScoreBoard";
 import {GameScreenWrapper} from "./gameScreen.style";
@@ -37,81 +35,87 @@ const GameScreen = ({
                 <PageHeader title={'Procons 2020'}/>
             </div>
 
-            <Row className={'play-fields'}>
-                <Col span={12}>
-                    <Spin spinning={isLoading}>
-                        <Board mapInfo={mapInfo}/>
-                    </Spin>
-                </Col>
+            <Spin spinning={isLoading}>
+                <div style={{width: '100%', height: '100vh', display: 'flex'}}>
+                    <Board mapInfo={mapInfo}/>
+                    <div style={{width: '20%', height: '100vh', margin: 2}} className={'play-fields'}>
+                        <ScoreBoard mapInfo={mapInfo} opponentId={opponentId} ownerId={ownerId}/>
 
-                <Col span={12}>
-                    <ScoreBoard mapInfo={mapInfo} opponentId={opponentId} ownerId={ownerId}/>
+                        <div style={{margin: 10, display: 'flex'}}>
+                            <Tooltip title={"Refresh map"}>
+                                <Button onClick={() => requestFetchMapInfo()}>
+                                    <Icon type="undo"/>
+                                </Button>
+                            </Tooltip>
 
-                    <Button onClick={() => requestFetchMapInfo()}>
-                        <Icon type="undo"/>
-                        Cập nhật map
-                    </Button>
+                            <Tooltip title={"Send action to server"}>
+                                <Button onClick={() => requestSendAction()} loading={isLoading}>
+                                    <Icon type="cloud-upload"/>
+                                </Button>
+                            </Tooltip>
 
-                    <Button onClick={() => requestSendAction()} loading={isLoading}>
-                        Gửi hành động
-                    </Button>
-
-                    <Button onClick={() => requestAskBot({mapInfo, teamId: ownerId})}>
-                        Magic
-                    </Button>
-                </Col>
-
-                <Modal
-                    title={'Đăng nhập'}
-                    visible={tokenModalVisible}
-                    footer={
-                        <Button
-                            onClick={() => {
-                                setTokenModalVisible(false);
-                                setGameToken({token});
-                                requestFetchMapInfo();
-                            }}
-                            disabled={!isTokenValid}
-                        >
-                            Sử dụng token, bắt đầu chơi
-                        </Button>
-                    }
-                    onCancel={() => notification.info({message: 'Bạn phải nhập token trước khi chơi'})}
-                >
-                    <Input value={token} onChange={e => setToken(e.target.value)} style={{width: '75%'}}/>
-                    <Button style={{width: '25%'}} loading={isLoading} onClick={() => requestCheckToken({token})}>
-                        Kiểm tra token
-                    </Button>
-
-                    <div style={{display: 'flex', flexWrap: 'wrap'}}>
-                        <Select value={matchId} onChange={value => setGameMatchId({matchId: value})}
-                                style={{width: '50%'}}>
-                            {
-                                listMatch.map(singleMatch => {
-                                    return (
-                                        <Select.Option key={singleMatch.id}>
-                                            {singleMatch.id}
-                                        </Select.Option>
-                                    )
-                                })
-                            }
-                        </Select>
-                        <Button style={{width: '20%', backgroundColor: 'darkgray', color: 'white'}} disabled={true}> ID
-                            trận đấu </Button>
-                        <Icon style={{width: '10%', color: 'green', fontSize: 30}}
-                              type={isTokenValid ? 'check-circle' : 'close'}/>
-                        <InputNumber style={{width: '50%'}} value={ownerId}
-                                     onChange={value => setGameOwnerId({ownerId: value})}/>
-                        <Button style={{width: '20%', backgroundColor: 'green', color: 'white'}} disabled={true}> ID đội
-                            mình </Button>
-                        <InputNumber style={{width: '50%'}} value={opponentId}
-                                     onChange={value => setGameOpponentId({opponentId: value})}/>
-                        <Button style={{width: '20%', backgroundColor: 'red', color: 'white'}} disabled={true}> ID đội
-                            bạn </Button>
+                            <Tooltip title={"Ask bot for action"}>
+                                <Button onClick={() => requestAskBot({mapInfo, teamId: ownerId})}>
+                                    <Icon type="robot"/>
+                                </Button>
+                            </Tooltip>
+                        </div>
                     </div>
+                </div>
+            </Spin>
 
-                </Modal>
-            </Row>
+
+            <Modal
+                title={'Đăng nhập'}
+                visible={tokenModalVisible}
+                footer={
+                    <Button
+                        onClick={() => {
+                            setTokenModalVisible(false);
+                            setGameToken({token});
+                            requestFetchMapInfo();
+                        }}
+                        disabled={!isTokenValid}
+                    >
+                        Sử dụng token, bắt đầu chơi
+                    </Button>
+                }
+                onCancel={() => notification.info({message: 'Bạn phải nhập token trước khi chơi'})}
+            >
+                <Input value={token} onChange={e => setToken(e.target.value)} style={{width: '75%'}}/>
+                <Button style={{width: '25%'}} loading={isLoading} onClick={() => requestCheckToken({token})}>
+                    Kiểm tra token
+                </Button>
+
+                <div style={{display: 'flex', flexWrap: 'wrap'}}>
+                    <Select value={matchId} onChange={value => setGameMatchId({matchId: value})}
+                            style={{width: '50%'}}>
+                        {
+                            listMatch.map(singleMatch => {
+                                return (
+                                    <Select.Option key={singleMatch.id}>
+                                        {singleMatch.id}
+                                    </Select.Option>
+                                )
+                            })
+                        }
+                    </Select>
+                    <Button style={{width: '20%', backgroundColor: 'darkgray', color: 'white'}} disabled={true}> ID
+                        trận đấu </Button>
+                    <Icon style={{width: '10%', color: 'green', fontSize: 30}}
+                          type={isTokenValid ? 'check-circle' : 'close'}/>
+                    <InputNumber style={{width: '50%'}} value={ownerId}
+                                 onChange={value => setGameOwnerId({ownerId: value})}/>
+                    <Button style={{width: '20%', backgroundColor: 'green', color: 'white'}} disabled={true}> ID đội
+                        mình </Button>
+                    <InputNumber style={{width: '50%'}} value={opponentId}
+                                 onChange={value => setGameOpponentId({opponentId: value})}/>
+                    <Button style={{width: '20%', backgroundColor: 'red', color: 'white'}} disabled={true}> ID đội
+                        bạn </Button>
+                </div>
+
+            </Modal>
+
         </GameScreenWrapper>
     )
 };

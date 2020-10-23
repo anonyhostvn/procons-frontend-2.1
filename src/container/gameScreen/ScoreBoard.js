@@ -6,7 +6,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
     const opponentTeamInfo = mapInfo && mapInfo.teams ? mapInfo.teams.filter(team => team.teamID === opponentId)[0] : null;
 
     return (
-        <Row gutter={16} style={{width: '500px', margin: 20}}>
+        <Row gutter={16} style={{width: '100%', margin: 0}}>
             <Col span={24}>
                 <Statistic
                     title="Lượt chơi"
@@ -16,7 +16,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     prefix={<Icon type="arrow-up"/>}
                 />
             </Col>
-            <Col span={8}>
+            <Col span={24}>
                 <Card>
                     <Statistic
                         title="Điểm đội mình"
@@ -27,7 +27,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={24}>
                 <Card>
                     <Statistic
                         title="Điểm tile đội mình"
@@ -38,7 +38,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={24}>
                 <Card>
                     <Statistic
                         title="Điểm khu vực đội mình"
@@ -49,7 +49,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={24}>
                 <Card>
                     <Statistic
                         title="Điểm đối phương"
@@ -60,7 +60,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={24}>
                 <Card>
                     <Statistic
                         title="Điểm tile đối phương"
@@ -71,7 +71,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={24}>
                 <Card>
                     <Statistic
                         title="Điểm khu vực đối phương"
