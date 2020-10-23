@@ -11,7 +11,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                 <Statistic
                     title="Lượt chơi"
                     value={mapInfo ? mapInfo.turn : 0}
-                    precision={2}
+                    precision={0}
                     valueStyle={{color: '#3f8600'}}
                     prefix={<Icon type="arrow-up"/>}
                 />
@@ -21,7 +21,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     <Statistic
                         title="Điểm đội mình"
                         value={(ownerTeamInfo) ? ownerTeamInfo.tilePoint + ownerTeamInfo.areaPoint : 0}
-                        precision={2}
+                        precision={0}
                         valueStyle={{color: '#3f8600'}}
                         prefix={<Icon type="arrow-up"/>}
                     />
@@ -32,7 +32,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     <Statistic
                         title="Điểm tile đội mình"
                         value={ownerTeamInfo ? ownerTeamInfo.tilePoint : 0}
-                        precision={2}
+                        precision={0}
                         valueStyle={{color: '#3f8600'}}
                         prefix={<Icon type="arrow-up"/>}
                     />
@@ -43,7 +43,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     <Statistic
                         title="Điểm khu vực đội mình"
                         value={ownerTeamInfo ? ownerTeamInfo.areaPoint : 0}
-                        precision={2}
+                        precision={0}
                         valueStyle={{color: '#3f8600'}}
                         prefix={<Icon type="arrow-up"/>}
                     />
@@ -54,7 +54,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     <Statistic
                         title="Điểm đối phương"
                         value={opponentTeamInfo ? opponentTeamInfo.tilePoint + opponentTeamInfo.areaPoint : 0}
-                        precision={2}
+                        precision={0}
                         valueStyle={{color: '#cf1322'}}
                         prefix={<Icon type="arrow-up"/>}
                     />
@@ -65,7 +65,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     <Statistic
                         title="Điểm tile đối phương"
                         value={opponentTeamInfo ? opponentTeamInfo.tilePoint : 0}
-                        precision={2}
+                        precision={0}
                         valueStyle={{color: '#cf1322'}}
                         prefix={<Icon type="arrow-up"/>}
                     />
@@ -76,7 +76,7 @@ export const ScoreBoard = ({mapInfo, ownerId, opponentId}) => {
                     <Statistic
                         title="Điểm khu vực đối phương"
                         value={opponentTeamInfo ? opponentTeamInfo.areaPoint : 0}
-                        precision={2}
+                        precision={0}
                         valueStyle={{color: '#cf1322'}}
                         prefix={<Icon type="arrow-up"/>}
                     />

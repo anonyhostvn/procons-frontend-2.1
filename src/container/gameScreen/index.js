@@ -42,21 +42,27 @@ const GameScreen = ({
                         <ScoreBoard mapInfo={mapInfo} opponentId={opponentId} ownerId={ownerId}/>
 
                         <div style={{margin: 10, display: 'flex'}}>
-                            <Tooltip title={"Refresh map"}>
+                            <Tooltip title={"Refresh lại map"}>
                                 <Button onClick={() => requestFetchMapInfo()}>
                                     <Icon type="undo"/>
                                 </Button>
                             </Tooltip>
 
-                            <Tooltip title={"Send action to server"}>
+                            <Tooltip title={"Gửi hành động tới server"}>
                                 <Button onClick={() => requestSendAction()} loading={isLoading}>
                                     <Icon type="cloud-upload"/>
                                 </Button>
                             </Tooltip>
 
-                            <Tooltip title={"Ask bot for action"}>
-                                <Button onClick={() => requestAskBot({mapInfo, teamId: ownerId})}>
-                                    <Icon type="robot"/>
+                            <Tooltip title={"Chạy bot của Hưng"}>
+                                <Button onClick={() => requestAskBot({mapInfo, teamId: ownerId, bot: 'bot-matching-new'})}>
+                                    <Icon type="robot" />
+                                </Button>
+                            </Tooltip>
+
+                            <Tooltip title={"Chạy bot của Tất Đạt"}>
+                                <Button onClick={() => requestAskBot({mapInfo, teamId: ownerId, bot: 'bot-or'})}>
+                                    <Icon type="robot" />
                                 </Button>
                             </Tooltip>
                         </div>

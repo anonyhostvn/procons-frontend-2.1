@@ -17,7 +17,7 @@ export const moveAgent = (virtualAgents, draggingAgent, {toX, toY}) => {
 export const botMoveAgent = (actions, recentAgents, teamId) => {
     const newAgents = [];
 
-    actions.forEach(
+    actions && actions.forEach(
         action => {
             recentAgents.filter(agent => agent.agentID === action.agentID).forEach(
                 rightAgent => {

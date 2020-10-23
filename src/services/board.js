@@ -26,6 +26,6 @@ export const observableSendAction = (token, matchId, actions) => new Observable(
     }).then(data => observer.next(data)).catch(err => observer.error(err));
 });
 
-export const observableAskBotAction = (mapInfo, teamId) => new Observable(observer => {
-    Axios.post(`${botServer}/ask-bot` , {mapInfo, teamId}).then(data => observer.next(data)).catch(err => observer.error(err));
+export const observableAskBotAction = (mapInfo, teamId, bot) => new Observable(observer => {
+    Axios.post(`${botServer}/fantastic-bot/${bot}` , {mapState: mapInfo, teamId}).then(data => observer.next(data)).catch(err => observer.error(err));
 });

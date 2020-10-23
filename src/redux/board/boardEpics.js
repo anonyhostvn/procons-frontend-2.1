@@ -67,7 +67,7 @@ const sendActionEpic = (action$, state$) => action$.pipe(
 const askBotEpic = (action$, state$) => action$.pipe(
     ofType(boardDuck.actions.requestAskBot().type),
     mergeMap(
-        action => observableAskBotAction(action.payload.mapInfo, action.payload.teamId).pipe(
+        ({payload: {mapInfo, teamId, bot}}) => observableAskBotAction(mapInfo, teamId, bot).pipe(
             mergeMap(
                 data => of(
                     boardDuck.actions.successRequestAskBot({actions: data.data.actions})
