@@ -8,7 +8,13 @@ import Overlay from "./overlay";
 import {canDropAgent} from "../redux/utilities";
 
 const BoardSquare = ({rowId, colId, squareTile, ownerId, opponentId, draggingAgent, moveAgent, children}) => {
-    const color= squareTile === ownerId ? 'green' : squareTile === opponentId ? 'red' : 'white';
+    const color = squareTile === 'treasure' ? '#fff176' :
+        (
+            squareTile === 'obstacle' ? '#8d6e63' :
+                (
+                    squareTile === ownerId ? 'green' : squareTile === opponentId ? 'red' : 'white'
+                )
+        );
 
     const [{isOver, canDrop}, drop] = useDrop({
         accept: ItemTypes.AGENT,
@@ -29,7 +35,7 @@ const BoardSquare = ({rowId, colId, squareTile, ownerId, opponentId, draggingAge
                 color={color}
             >
                 {children}
-                {isOver && canDrop && <Overlay color={'green'}/> }
+                {isOver && canDrop && <Overlay color={'green'}/>}
             </Square>
         </div>
     );

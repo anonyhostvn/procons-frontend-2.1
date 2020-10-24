@@ -3,6 +3,7 @@ import Board from "../../component/board";
 import {connect} from "react-redux";
 import {boardDuck} from '../../redux/board/boardDucks';
 import {
+    Statistic,
     Button,
     Icon,
     Input,
@@ -28,6 +29,10 @@ const GameScreen = ({
                     }) => {
     const [token, setToken] = useState('');
     const [tokenModalVisible, setTokenModalVisible] = useState(true);
+
+    const turnIntervalMillisecond = 10000; // ms
+    const {turn, startedAtUnixTime} = mapInfo;
+    const deadline = startedAtUnixTime + turn * turnIntervalMillisecond;
 
     return (
         <GameScreenWrapper>
@@ -65,6 +70,10 @@ const GameScreen = ({
                                     <Icon type="robot" />
                                 </Button>
                             </Tooltip>
+                        </div>
+
+                        <div style={{margin: 10}}>
+                            <Statistic.Countdown title="Thời gian còn lại" value={deadline}/>
                         </div>
                     </div>
                 </div>

@@ -44,14 +44,18 @@ const agentCreator = (rowId, colId, teams, virtualAgents) => {
     )
 };
 
-const squareCreator = (rowId, colId, boardWidth, boardHeight, squareScore, squareTile, teams, virtualAgents) => {
+const squareCreator = (rowId, colId, boardWidth, boardHeight, squareScore, squareTile, teams, virtualAgents, treasure, obstacles) => {
     const percentWidth = 100.0 / boardWidth;
     const percentHeight = 100.0 / boardHeight;
+    const isTreasure = treasure && treasure.filter(item => item.status === 0 && item.x === colId && item.y === rowId).length > 0;
+    const recentTreasure = isTreasure ? treasure.filter(item => item.status === 0 && item.x === colId && item.y === rowId)[0] : {};
+    const isObstacles = obstacles && obstacles.filter(item => item.x === colId && item.y === rowId).length > 0;
+    const newSquareTile = isTreasure ? 'treasure' : (isObstacles ? 'obstacle' : squareTile);
 
     return (
         <div key={`${rowId} - ${colId}`} style={{width: `${percentWidth}%`, height: `${percentHeight}%`}}>
-            <BoardSquare rowId={rowId} colId={colId} squareTile={squareTile}>
-                {squareScore}
+            <BoardSquare rowId={rowId} colId={colId} squareTile={newSquareTile}>
+                {isTreasure ? recentTreasure.point : squareScore}
                 {agentCreator(rowId, colId, teams, virtualAgents)}
             </BoardSquare>
         </div>
@@ -60,10 +64,11 @@ const squareCreator = (rowId, colId, boardWidth, boardHeight, squareScore, squar
 
 const Board = ({mapInfo, virtualAgents}) => {
     const listSquare = [];
+    const {width, height, points, tiled, teams, treasure, obstacles} = mapInfo;
 
     for (let i = 0; i < mapInfo.width; i++)
         for (let j = 0; j < mapInfo.height; j++) {
-            listSquare.push(squareCreator(i+1,j+1, mapInfo.width, mapInfo.height, mapInfo.points[i][j], mapInfo.tiled[i][j], mapInfo.teams, virtualAgents));
+            listSquare.push(squareCreator(i+1,j+1, width, height, points[i][j], tiled[i][j], teams, virtualAgents, treasure, obstacles));
         }
 
     return (
